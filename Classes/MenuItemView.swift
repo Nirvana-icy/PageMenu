@@ -54,10 +54,11 @@ class MenuItemView: UIView {
         }
         
         // Configure menu item label font if font is set by user
-        self.titleLabel!.font = pageMenu.configuration.menuItemFont
+//        self.titleLabel!.font = pageMenu.configuration.menuItemFont
         
         self.titleLabel!.textAlignment = NSTextAlignment.center
         self.titleLabel!.textColor = pageMenu.configuration.unselectedMenuItemLabelColor
+        self.titleLabel!.font = pageMenu.configuration.unselectedMenuItemLabelFont
         
         //**************************拡張*************************************
         self.titleLabel!.adjustsFontSizeToFitWidth = pageMenu.configuration.titleTextSizeBasedOnMenuItemWidth
@@ -71,7 +72,7 @@ class MenuItemView: UIView {
         }
         
         // Add separator between menu items when using as segmented control
-        if pageMenu.configuration.useMenuLikeSegmentedControl {
+        if pageMenu.configuration.useMenuLikeSegmentedControl{
             if Int(index) < pageMenu.controllerArray.count - 1 {
                 self.menuItemSeparator!.isHidden = false
             }

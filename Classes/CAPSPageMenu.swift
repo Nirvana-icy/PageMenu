@@ -171,8 +171,19 @@ extension CAPSPageMenu {
                 var selectionIndicatorX : CGFloat = 0.0
                 
                 if self.configuration.useMenuLikeSegmentedControl {
-                    selectionIndicatorX = CGFloat(pageIndex) * (self.view.frame.width / CGFloat(self.controllerArray.count))
-                    selectionIndicatorWidth = self.view.frame.width / CGFloat(self.controllerArray.count)
+                    if self.configuration.IndicatorViewLineIsAdaptionWithTitle{
+                        selectionIndicatorWidth=self.menuItemWidths[pageIndex]
+                        selectionIndicatorX = CGFloat(pageIndex) * (self.view.frame.width / CGFloat(self.controllerArray.count))+CGFloat((self.view.frame.width / CGFloat(self.controllerArray.count)-selectionIndicatorWidth)/2.0)
+                    }
+                    else
+                    {
+                    if self.configuration.adjustSelectionIndicatorWidth{
+                    selectionIndicatorX = CGFloat(pageIndex) * (self.view.frame.width / CGFloat(self.controllerArray.count))+CGFloat((self.view.frame.width / CGFloat(self.controllerArray.count)-self.configuration.SelectionIndicatorValue)/2.0)
+                    }else{
+                        selectionIndicatorX = CGFloat(pageIndex) * (self.view.frame.width / CGFloat(self.controllerArray.count))
+                        selectionIndicatorWidth = self.view.frame.width / CGFloat(self.controllerArray.count)
+                        }
+                    }
                 } else if self.configuration.menuItemWidthBasedOnTitleTextWidth {
                     selectionIndicatorWidth = self.menuItemWidths[pageIndex]
                     selectionIndicatorX += self.configuration.menuMargin
@@ -197,6 +208,9 @@ extension CAPSPageMenu {
                     if self.menuItems[self.lastPageIndex].titleLabel != nil && self.menuItems[self.currentPageIndex].titleLabel != nil {
                         self.menuItems[self.lastPageIndex].titleLabel!.textColor = self.configuration.unselectedMenuItemLabelColor
                         self.menuItems[self.currentPageIndex].titleLabel!.textColor = self.configuration.selectedMenuItemLabelColor
+                        
+                        self.menuItems[self.lastPageIndex].titleLabel!.font = self.configuration.unselectedMenuItemLabelFont
+                        self.menuItems[self.currentPageIndex].titleLabel!.font = self.configuration.selectedMenuItemLabelFont
                     }
                 }
             })
@@ -239,7 +253,12 @@ extension CAPSPageMenu {
         controllerScrollView.contentSize = CGSize(width: self.view.frame.width * CGFloat(controllerArray.count), height: self.view.frame.height - configuration.menuHeight)
         
         let oldCurrentOrientationIsPortrait : Bool = currentOrientationIsPortrait
-        currentOrientationIsPortrait = UIDevice.current.orientation.isPortrait
+        
+//        currentOrientationIsPortrait = UIDevice.current.orientation.isPortrait
+        
+        // MARK: - 浪客改变， 根据github上的issues解决， 这是为了保证真机测试竖屏不锁定的时候也可以滑动菜单， 数据也不会错乱等问题，很重要！！！！！！！！！
+//        currentOrientationIsPortrait = UIDevice.current.orientation.isPortrait || UIDevice.current.orientation.isFlat
+        currentOrientationIsPortrait = true
         
         if (oldCurrentOrientationIsPortrait && UIDevice.current.orientation.isLandscape) || (!oldCurrentOrientationIsPortrait && UIDevice.current.orientation.isPortrait) {
             didLayoutSubviewsAfterRotation = true
@@ -350,7 +369,7 @@ extension CAPSPageMenu {
             }
             
             // Move controller scroll view when tapping menu item
-            let duration : Double = Double(configuration.scrollAnimationDurationOnMenuItemTap) / Double(1000)
+            let duration : Double = Double(configuration.scrollAnimationDurationOnMenuItemTap) / Double(2000)// 动画时间我这里变为2000，之前是1000， 浪客
             
             UIView.animate(withDuration: duration, animations: { () -> Void in
                 let xOffset : CGFloat = CGFloat(index) * self.controllerScrollView.frame.width

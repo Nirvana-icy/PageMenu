@@ -9,6 +9,7 @@
 import UIKit
 
 extension CAPSPageMenu {
+    //根据options数组配置PageMenu
     func configurePageMenu(options: [CAPSPageMenuOption]) {
         for option in options {
             switch (option) {
@@ -36,12 +37,16 @@ extension CAPSPageMenu {
                 configuration.selectedMenuItemLabelColor = value
             case let .unselectedMenuItemLabelColor(value):
                 configuration.unselectedMenuItemLabelColor = value
+            case let .unselectedMenuItemLabelFont(value):
+                configuration.unselectedMenuItemLabelFont = value
+            case let .selectedMenuItemLabelFont(value):
+                configuration.selectedMenuItemLabelFont = value
             case let .useMenuLikeSegmentedControl(value):
                 configuration.useMenuLikeSegmentedControl = value
             case let .menuItemSeparatorRoundEdges(value):
                 configuration.menuItemSeparatorRoundEdges = value
-            case let .menuItemFont(value):
-                configuration.menuItemFont = value
+//            case let .menuItemFont(value):
+//                configuration.menuItemFont = value
             case let .menuItemSeparatorPercentageHeight(value):
                 configuration.menuItemSeparatorPercentageHeight = value
             case let .menuItemWidth(value):
@@ -60,9 +65,15 @@ extension CAPSPageMenu {
                 configuration.centerMenuItems = value
             case let .hideTopMenuBar(value):
                 configuration.hideTopMenuBar = value
+            case let .SelectionIndicatorValue(value):
+                configuration.SelectionIndicatorValue=value
+            case let .adjustSelectionIndicatorWidth(value):
+                configuration.adjustSelectionIndicatorWidth=value
+            case let .IndicatorViewLineIsAdaptionWithTitle(value):
+                configuration.IndicatorViewLineIsAdaptionWithTitle=value
             }
         }
-        
+        //是否隐藏MenuBar
         if configuration.hideTopMenuBar {
             configuration.addBottomMenuHairline = false
             configuration.menuHeight = 0.0
@@ -102,7 +113,7 @@ extension CAPSPageMenu {
         self.view.addConstraints(menuScrollView_constraint_V)
         
         // Add hairline to menu scroll view
-        if configuration.addBottomMenuHairline {
+        if configuration.addBottomMenuHairline { //如果addBottomMenuHairline==true，添加bottomline
             let menuBottomHairline : UIView = UIView()
             
             menuBottomHairline.translatesAutoresizingMaskIntoConstraints = false
@@ -148,7 +159,7 @@ extension CAPSPageMenu {
         controllerScrollView.scrollsToTop = false;
         
         // Configure menu scroll view
-        if configuration.useMenuLikeSegmentedControl {
+        if configuration.useMenuLikeSegmentedControl {//useMenuLikeSegmentedControl==true,就是menu作为分段
             menuScrollView.isScrollEnabled = false
             menuScrollView.contentSize = CGSize(width: self.view.frame.width, height: configuration.menuHeight)
             configuration.menuMargin = 0.0
@@ -174,6 +185,15 @@ extension CAPSPageMenu {
             
             if configuration.useMenuLikeSegmentedControl {
                 //**************************拡張*************************************
+                if configuration.IndicatorViewLineIsAdaptionWithTitle{
+                    let controllerTitle : String? = controller.title
+                    
+                    let titleText : String = controllerTitle != nil ? controllerTitle! : "Menu \(Int(index) + 1)"
+                    let itemWidthRect : CGRect = (titleText as NSString).boundingRect(with: CGSize(width: 1000, height: 1000), options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSFontAttributeName:configuration.unselectedMenuItemLabelFont], context: nil)
+                    
+                    menuItemWidths.append(itemWidthRect.width)
+                
+                }
                 if menuItemMargin > 0 {
                     let marginSum = menuItemMargin * CGFloat(controllerArray.count + 1)
                     let menuItemWidth = (self.view.frame.width - marginSum) / CGFloat(controllerArray.count)
@@ -186,7 +206,7 @@ extension CAPSPageMenu {
                 let controllerTitle : String? = controller.title
                 
                 let titleText : String = controllerTitle != nil ? controllerTitle! : "Menu \(Int(index) + 1)"
-                let itemWidthRect : CGRect = (titleText as NSString).boundingRect(with: CGSize(width: 1000, height: 1000), options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSFontAttributeName:configuration.menuItemFont], context: nil)
+                let itemWidthRect : CGRect = (titleText as NSString).boundingRect(with: CGSize(width: 1000, height: 1000), options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSFontAttributeName:configuration.unselectedMenuItemLabelFont], context: nil)
                 configuration.menuItemWidth = itemWidthRect.width
                 
                 menuItemFrame = CGRect(x: totalMenuItemWidthIfDifferentWidths + configuration.menuMargin + (configuration.menuMargin * index), y: 0.0, width: configuration.menuItemWidth, height: configuration.menuHeight)
@@ -226,14 +246,30 @@ extension CAPSPageMenu {
         if menuItems.count > 0 {
             if menuItems[currentPageIndex].titleLabel != nil {
                 menuItems[currentPageIndex].titleLabel!.textColor = configuration.selectedMenuItemLabelColor
+                menuItems[currentPageIndex].titleLabel?.font = configuration.selectedMenuItemLabelFont
             }
         }
         
-        // Configure selection indicator view
+        // Configure selection indicator view 配置滚动线
         var selectionIndicatorFrame : CGRect = CGRect()
+        let menuSingleWidth = self.view.frame.width / CGFloat(controllerArray.count)
+        //let IndicatorLineWidth = CGFloat(72)
         
         if configuration.useMenuLikeSegmentedControl {
-            selectionIndicatorFrame = CGRect(x: 0.0, y: configuration.menuHeight - configuration.selectionIndicatorHeight, width: self.view.frame.width / CGFloat(controllerArray.count), height: configuration.selectionIndicatorHeight)
+            if configuration.IndicatorViewLineIsAdaptionWithTitle{
+            selectionIndicatorFrame = CGRect(x: (menuSingleWidth-menuItemWidths[0])/2.0, y: configuration.menuHeight - configuration.selectionIndicatorHeight, width: menuItemWidths[0], height: configuration.selectionIndicatorHeight)
+            
+            }
+            else
+            {
+            if configuration.adjustSelectionIndicatorWidth{
+                selectionIndicatorFrame = CGRect(x: (menuSingleWidth-configuration.SelectionIndicatorValue)/2.0, y: configuration.menuHeight - configuration.selectionIndicatorHeight, width: configuration.SelectionIndicatorValue, height: configuration.selectionIndicatorHeight)
+            }
+            else{
+                selectionIndicatorFrame = CGRect(x: 0.0, y: configuration.menuHeight - configuration.selectionIndicatorHeight, width: self.view.frame.width / CGFloat(controllerArray.count), height: configuration.selectionIndicatorHeight)
+                }
+            }
+            
         } else if configuration.menuItemWidthBasedOnTitleTextWidth {
             selectionIndicatorFrame = CGRect(x: configuration.menuMargin, y: configuration.menuHeight - configuration.selectionIndicatorHeight, width: menuItemWidths[0], height: configuration.selectionIndicatorHeight)
         } else {

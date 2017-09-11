@@ -17,12 +17,14 @@ public class CAPSPageMenuConfiguration {
     open var selectionIndicatorColor : UIColor = UIColor.white
     open var selectedMenuItemLabelColor : UIColor = UIColor.white
     open var unselectedMenuItemLabelColor : UIColor = UIColor.lightGray
+    open var selectedMenuItemLabelFont : UIFont = UIFont.systemFont(ofSize: 15.0)
+    open var unselectedMenuItemLabelFont : UIFont = UIFont.systemFont(ofSize: 15.0)
     open var scrollMenuBackgroundColor : UIColor = UIColor.black
     open var viewBackgroundColor : UIColor = UIColor.white
     open var bottomMenuHairlineColor : UIColor = UIColor.white
     open var menuItemSeparatorColor : UIColor = UIColor.lightGray
     
-    open var menuItemFont : UIFont = UIFont.systemFont(ofSize: 15.0)
+//    open var menuItemFont : UIFont = UIFont.systemFont(ofSize: 15.0)
     open var menuItemSeparatorPercentageHeight : CGFloat = 0.2
     open var menuItemSeparatorWidth : CGFloat = 0.5
     open var menuItemSeparatorRoundEdges : Bool = false
@@ -34,6 +36,9 @@ public class CAPSPageMenuConfiguration {
     open var centerMenuItems : Bool = false
     open var enableHorizontalBounce : Bool = true
     open var hideTopMenuBar : Bool = false
+    open var adjustSelectionIndicatorWidth : Bool = false
+    open var SelectionIndicatorValue: CGFloat = 15.0
+    open var IndicatorViewLineIsAdaptionWithTitle : Bool = false
     
     public init() {
         

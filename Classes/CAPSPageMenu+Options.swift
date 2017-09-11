@@ -20,28 +20,33 @@
 import UIKit
 
 public enum CAPSPageMenuOption {
-    case selectionIndicatorHeight(CGFloat)
-    case menuItemSeparatorWidth(CGFloat)
-    case scrollMenuBackgroundColor(UIColor)
-    case viewBackgroundColor(UIColor)
-    case bottomMenuHairlineColor(UIColor)
-    case selectionIndicatorColor(UIColor)
-    case menuItemSeparatorColor(UIColor)
-    case menuMargin(CGFloat)
+    case selectionIndicatorHeight(CGFloat)            //滚动条的高度
+    case menuItemSeparatorWidth(CGFloat)              //分割线的宽度
+    case scrollMenuBackgroundColor(UIColor)           //菜单栏的背景颜色
+    case viewBackgroundColor(UIColor)                 //数组中所有的控制器的背景颜色
+    case bottomMenuHairlineColor(UIColor)             //菜单栏整体的下划线的颜色
+    case selectionIndicatorColor(UIColor)             //滚动条的颜色
+    case menuItemSeparatorColor(UIColor)              //分割线的颜色
+    case menuMargin(CGFloat)                          //菜单项之间的空隙，第一个菜单项之前，最后一个菜单项之后
     case menuItemMargin(CGFloat)
-    case menuHeight(CGFloat)
-    case selectedMenuItemLabelColor(UIColor)
-    case unselectedMenuItemLabelColor(UIColor)
-    case useMenuLikeSegmentedControl(Bool)
-    case menuItemSeparatorRoundEdges(Bool)
-    case menuItemFont(UIFont)
-    case menuItemSeparatorPercentageHeight(CGFloat)
-    case menuItemWidth(CGFloat)
-    case enableHorizontalBounce(Bool)
-    case addBottomMenuHairline(Bool)
-    case menuItemWidthBasedOnTitleTextWidth(Bool)
-    case titleTextSizeBasedOnMenuItemWidth(Bool)
-    case scrollAnimationDurationOnMenuItemTap(Int)
-    case centerMenuItems(Bool)
-    case hideTopMenuBar(Bool)
+    case menuHeight(CGFloat)                          //菜单栏的高度
+    case selectedMenuItemLabelColor(UIColor)          //被选中的菜单项标签颜色
+    case unselectedMenuItemLabelColor(UIColor)        //未被选中的菜单项标签颜色
+    case selectedMenuItemLabelFont(UIFont)        //被选中的菜单项标签字体
+    case unselectedMenuItemLabelFont(UIFont)        //被选中的菜单项标签字体
+    case useMenuLikeSegmentedControl(Bool)            //Use PageMenu as segmented control
+    case menuItemSeparatorRoundEdges(Bool)            //Menu item separator has rounded edges
+//    case menuItemFont(UIFont)                         //菜单项的字体
+    case menuItemSeparatorPercentageHeight(CGFloat)   //Menu item separator height in percentage of menu height
+    case menuItemWidth(CGFloat)                       //Scroll menu item width
+    case enableHorizontalBounce(Bool)                 //Disable/Enable horizontal bounce for controller scroll view
+    case addBottomMenuHairline(Bool)                   //菜单栏是否添加整体的下划线
+    case menuItemWidthBasedOnTitleTextWidth(Bool)       //Menu item witdh based on title text width 未经验证
+    case titleTextSizeBasedOnMenuItemWidth(Bool)        //类似，未经验证
+    case scrollAnimationDurationOnMenuItemTap(Int)      //点击切换菜单滚动动画持续时间
+    case centerMenuItems(Bool)                          //如果菜单项不是整个屏幕宽度，菜单项是否处于center,暂时不支持menuItemWidthBasedOnTitleTextWidth模式
+    case hideTopMenuBar(Bool)                           //是否隐藏top menu bar
+    case adjustSelectionIndicatorWidth(Bool)            //是否调整选中滚动线的宽度
+    case SelectionIndicatorValue(CGFloat)               //滚动线的宽度的数值
+    case IndicatorViewLineIsAdaptionWithTitle(Bool)     //是否滚动条自适应文字长度
 }
